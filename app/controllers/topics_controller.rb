@@ -4,7 +4,10 @@ class TopicsController < ApplicationController
   # GET /topics
   # GET /topics.json
   def index
-    @topics = Topic.all
+    # @topics = Topic.all
+    @user = User.create()
+    @topics = Topic.joins('LEFT OUTER JOIN votes ON votes.topic_id = topics.id').group('topics.id').order('count(topics.id) DESC')
+    # @topics.sort_by(&:votes_count)
   end
 
   # GET /topics/1
@@ -19,7 +22,16 @@ class TopicsController < ApplicationController
 
   def upvote
     @topic = Topic.find(params[:id])
-    @topic.votes.create
+    @topic.upvote
+    redirect_to(topics_path)
+  end
+
+  def about
+  end
+
+  def downvote
+    @topic = Topic.find(params[:id])
+    @topic.downvote
     redirect_to(topics_path)
   end
 

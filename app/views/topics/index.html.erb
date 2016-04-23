@@ -1,6 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <h1>Listing Topics</h1>
+<%= "hello #{current_user.username}" %>
 
 <table>
   <thead>
@@ -16,6 +17,9 @@
         <td><%= link_to topic.title, topic %></td>
         <td><%= pluralize(topic.votes.count, "vote") %></td>
         <td><%= button_to '+1', upvote_topic_path(topic), method: :post %></td>
+        <% if topic.votes.length > 0 %>
+          <td><%= button_to '-1', downvote_topic_path(topic), method: :delete %></td>
+        <% end %>
         <td><%= link_to 'Delete', topic, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
@@ -24,4 +28,13 @@
 
 <br>
 
-<%= link_to 'New Topic', new_topic_path %>
+<%= link_to 'New Topic', new_topic_path %> <br>
+<%= link_to 'About', topics_about_path %>
+
+<%= form_for @user, method:"post", url: {controller: "users", action: "login"} do |f| %>
+  <%= f.text_field :username %>
+  <%= f.text_field :password %>
+  <%= f.submit "Login" %>
+<% end %>
+
+
